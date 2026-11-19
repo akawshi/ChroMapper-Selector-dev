@@ -4,11 +4,11 @@
         <OutputType>Library</OutputType>
         <RootNamespace>Selector</RootNamespace>
         <AssemblyName>Selector</AssemblyName>
-        <TargetFramework>net48</TargetFramework>
+	<TargetFramework>netstandard2.1</TargetFramework>
         <LangVersion>13</LangVersion>
         <Nullable>warnings</Nullable>
-        <AssemblyVersion>1.3.2</AssemblyVersion>
-        <FileVersion>1.3.2</FileVersion>
+        <AssemblyVersion>1.3.3</AssemblyVersion>
+        <FileVersion>1.3.3</FileVersion>
         <IsPackable>false</IsPackable>
     </PropertyGroup>
     
@@ -37,13 +37,6 @@
         <Reference Include="UnityEngine.UIModule" Publicize="True">
             <HintPath>$(ChroMapperDir)\ChroMapper_Data\Managed\UnityEngine.UIModule.dll</HintPath>
         </Reference>
-        <Reference Include="System"/>
-        <Reference Include="System.Core"/>
-        <Reference Include="System.Xml.Linq"/>
-        <Reference Include="System.Data.DataSetExtensions"/>
-        <Reference Include="Microsoft.CSharp"/>
-        <Reference Include="System.Data"/>
-        <Reference Include="System.Xml"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -52,7 +45,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="Resources\Icon.png"/>
+	<EmbeddedResource Include="Resources\Icon.png" LogicalName="Selector.Icon.png"/>
     </ItemGroup>
 
     <ItemGroup>

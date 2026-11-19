@@ -24,13 +24,18 @@ internal class UI
         _extensionBtn.Icon = Utils.LoadSpriteFromResources("Selector.Icon.png");
         _extensionBtn.Tooltip = "Selector";
         ExtensionButtons.AddButton(_extensionBtn);
+	_extensionBtn.Click = ToggleMenu;
+
+
     }
 
     public void AddMenu(MapEditorUI mapEditorUI)
     {
+	
         var parent = mapEditorUI.MainUIGroup[5];
         _selectorMenu = new("Select Menu");
-        _selectorMenu.transform.parent = parent.transform;
+	_selectorMenu.transform.SetParent(parent.transform, false);
+
 
         AttachTransform(_selectorMenu, 300, 195, 1, 1, 0, 0, 1, 1);
 
@@ -165,7 +170,8 @@ internal class UI
             () => { Main.DeselectAll(); });
 
         _selectorMenu.SetActive(false);
-        _extensionBtn.Click = () => { _selectorMenu.SetActive(!_selectorMenu.activeSelf); };
+	_extensionBtn.Click = ToggleMenu;
+
     }
 
     private void AddButton(string text, Vector2 pos, UnityAction onClick)
@@ -184,7 +190,7 @@ internal class UI
     {
         var entryLabel = new GameObject(text + " Label", typeof(TextMeshProUGUI));
         var rectTransform = (RectTransform)entryLabel.transform;
-        rectTransform.SetParent(_selectorMenu.transform);
+        rectTransform.SetParent(_selectorMenu.transform, false);
 
         MoveTransform(rectTransform, 100, 20, 1, 1, pos.x, pos.y);
         var textComponent = entryLabel.GetComponent<TextMeshProUGUI>();
@@ -194,6 +200,7 @@ internal class UI
         textComponent.alignment = TextAlignmentOptions.Center;
         textComponent.fontSize = 14;
         textComponent.text = text;
+
     }
 
     private UITextInput AddNumberInput(string text, Vector2 pos, string value,
@@ -203,7 +210,7 @@ internal class UI
         {
             var entryLabel = new GameObject(text + " Label", typeof(TextMeshProUGUI));
             var rectTransform = (RectTransform)entryLabel.transform;
-            rectTransform.SetParent(_selectorMenu.transform);
+            rectTransform.SetParent(_selectorMenu.transform, false);
 
             MoveTransform(rectTransform, 60, 16, 1, 1, pos.x - 40, pos.y - 2);
             var textComponent = entryLabel.GetComponent<TextMeshProUGUI>();
@@ -244,7 +251,7 @@ internal class UI
         {
             var entryLabel = new GameObject(text + " Label", typeof(TextMeshProUGUI));
             var rectTransform = (RectTransform)entryLabel.transform;
-            rectTransform.SetParent(_selectorMenu.transform);
+            rectTransform.SetParent(_selectorMenu.transform, false);
             MoveTransform(rectTransform, 80, 16, 1, 1, pos.x - 18, pos.y - 2);
             var textComponent = entryLabel.GetComponent<TextMeshProUGUI>();
 
@@ -274,7 +281,7 @@ internal class UI
         {
             var entryLabel = new GameObject(text + " Label", typeof(TextMeshProUGUI));
             var rectTransform = (RectTransform)entryLabel.transform;
-            rectTransform.SetParent(_selectorMenu.transform);
+            rectTransform.SetParent(_selectorMenu.transform, false);
             MoveTransform(rectTransform, 60, 16, 1, 1, pos.x - 65, pos.y - 2);
             var textComponent = entryLabel.GetComponent<TextMeshProUGUI>();
 
@@ -313,4 +320,17 @@ internal class UI
         rectTransform.anchorMin = rectTransform.anchorMax = new(anchorX, anchorY);
         rectTransform.anchoredPosition = new(anchorPosX, anchorPosY);
     }
+	
+    private void ToggleMenu()
+    {
+        _main.EnsureMenu();
+        if (_selectorMenu == null)
+        {
+            UnityEngine.Debug.Log("[Selector] menu is null");
+            return;
+        }
+        _selectorMenu.SetActive(!_selectorMenu.activeSelf);
+        
+    }
+
 }

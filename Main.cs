@@ -17,6 +17,7 @@ public class Main
     private NoteGridContainer _noteGridContainer;
     private ObstacleGridContainer _obstacleGridContainer;
     private UI.UI _ui;
+    private bool _menuAdded;
     
     public AudioTimeSyncController Atsc;
 
@@ -41,9 +42,8 @@ public class Main
         _arcGridContainer = Object.FindObjectOfType<ArcGridContainer>();
         _chainsGridContainer = Object.FindObjectOfType<ChainGridContainer>();
         Atsc = Object.FindObjectOfType<AudioTimeSyncController>();
-
-        var mapEditorUI = Object.FindObjectOfType<MapEditorUI>();
-        _ui.AddMenu(mapEditorUI);
+	_menuAdded = false;
+	EnsureMenu();
     }
 
     private static void SelectObject<T>(T obj) where T : BaseObject
@@ -103,7 +103,7 @@ public class Main
             .Pipe(FilterGridY.Perform)
             .ToList().ForEach(SelectObject);
         
-        SelectionController.SelectionChangedEvent?.Invoke();
+        SelectionController.OnSelectionChanged?.Invoke();
     }
 
     public void SelectAll()
@@ -114,7 +114,7 @@ public class Main
         GrabObjects<BaseChain>(ObjectSelectType.Chain).ToList().ForEach(SelectObject);
         GrabObjects<BaseEvent>(ObjectSelectType.Event).ToList().ForEach(SelectObject);
         GrabObjects<BaseObstacle>(ObjectSelectType.Obstacle).ToList().ForEach(SelectObject);
-        SelectionController.SelectionChangedEvent?.Invoke();
+        SelectionController.OnSelectionChanged?.Invoke();
     }
 
     public void Deselect()
@@ -164,8 +164,18 @@ public class Main
             .Pipe(FilterGridY.Perform)
             .ToList().ForEach(DeselectObject);
 
-        SelectionController.SelectionChangedEvent?.Invoke();
+        SelectionController.OnSelectionChanged?.Invoke();
     }
+
+   public void EnsureMenu()
+{
+    if (_menuAdded) return;
+    var mapEditorUI = Object.FindObjectOfType<MapEditorUI>();
+    if (mapEditorUI == null) return;
+    _ui.AddMenu(mapEditorUI);
+    _menuAdded = true;
+}
+
 
     public static void DeselectAll()
     {
